@@ -387,6 +387,8 @@ def validar_opcion_menu():
 # FUNCIÓN PRINCIPAL DEL PROGRAMA
 # ============================================================================
 
+# TODO: mathcase
+
 
 def main():
     """
