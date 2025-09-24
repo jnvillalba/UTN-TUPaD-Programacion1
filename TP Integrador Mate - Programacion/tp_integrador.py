@@ -4,7 +4,7 @@ SIMULADOR DE PUERTAS LÓGICAS BÁSICAS
 
 Este programa simula el funcionamiento de puertas lógicas digitales básicas:
 - AND: Devuelve 1 solo si ambas entradas son 1
-- OR: Devuelve 1 si al menos una entrada es 1  
+- OR: Devuelve 1 si al menos una entrada es 1
 - NOT: Invierte el valor de entrada (0->1, 1->0)
 
 El diseño es escalable para agregar posteriormente:
@@ -77,8 +77,6 @@ def puerta_and(a, b):
     Retorna:
     - int: Resultado de la operación AND (1 solo si ambas entradas son 1)
     """
-    # Usando el operador lógico 'and' de Python
-    # Se podría usar también: return a * b (multiplicación binaria)
     if a == 1 and b == 1:
         return 1
     else:
@@ -96,7 +94,6 @@ def puerta_or(a, b):
     Retorna:
     - int: Resultado de la operación OR (1 si al menos una entrada es 1)
     """
-    # Usando estructura condicional clara
     if a == 1 or b == 1:
         return 1
     else:
@@ -113,8 +110,22 @@ def puerta_not(a):
     Retorna:
     - int: Resultado de la operación NOT (invierte el valor)
     """
-    # Inversión simple usando condicional
     if a == 0:
+        return 1
+    else:
+        return 0
+
+
+def puerta_nand(a, b):
+    return puerta_not(puerta_and(a, b))
+
+
+def puerta_nor(a, b):
+    return puerta_not(puerta_or(a, b))
+
+
+def puerta_xor(a, b):
+    if a != b:
         return 1
     else:
         return 0
@@ -204,7 +215,10 @@ def mostrar_menu():
     print("2. Puerta OR  - Al menos una entrada debe ser 1")
     print("3. Puerta NOT - Invierte la entrada")
     print("4. Ver todas las tablas de verdad")
-    print("5. Salir del programa")
+    print("5. Puerta NAND - NOT AND")
+    print("6. Puerta NOR  - NOT OR")
+    print("7. Puerta XOR  - OR exclusivo")
+    print("8. Salir del programa")
     print("="*50)
 
 
@@ -246,53 +260,105 @@ def ejecutar_puerta_generica(nombre_puerta, descripcion, funcion_puerta, es_una_
             mostrar_tabla_verdad_dos_entradas(nombre_puerta, funcion_puerta)
 
 
-def ejecutar_puerta_and():
-    """
-    Ejecuta la simulación de la puerta AND usando la función genérica.
-    """
-    ejecutar_puerta_generica(
-        nombre_puerta="AND",
-        descripcion="La puerta AND devuelve 1 solo si AMBAS entradas son 1",
-        funcion_puerta=puerta_and,
-        es_una_entrada=False
-    )
+# ============================================================================
+# CONFIGURACIÓN DE PUERTAS LÓGICAS
+# ============================================================================
+
+# Diccionario con la configuración de todas las puertas lógicas
+# Esto centraliza toda la información y facilita la adición de nuevas puertas
+PUERTAS_LOGICAS = {
+    1: {
+        "nombre": "AND",
+        "descripcion": "La puerta AND devuelve 1 solo si AMBAS entradas son 1",
+        "funcion": puerta_and,
+        "es_una_entrada": False
+    },
+    2: {
+        "nombre": "OR",
+        "descripcion": "La puerta OR devuelve 1 si AL MENOS UNA entrada es 1",
+        "funcion": puerta_or,
+        "es_una_entrada": False
+    },
+    3: {
+        "nombre": "NOT",
+        "descripcion": "La puerta NOT invierte la entrada: 0->1, 1->0",
+        "funcion": puerta_not,
+        "es_una_entrada": True
+    },
+    6: {
+        "nombre": "NAND",
+        "descripcion": "La puerta NAND es NOT AND: invierte el resultado de AND",
+        "funcion": puerta_nand,
+        "es_una_entrada": False
+    },
+    7: {
+        "nombre": "NOR",
+        "descripcion": "La puerta NOR es NOT OR: invierte el resultado de OR",
+        "funcion": puerta_nor,
+        "es_una_entrada": False
+    },
+    8: {
+        "nombre": "XOR",
+        "descripcion": "La puerta XOR devuelve 1 solo si las entradas son diferentes",
+        "funcion": puerta_xor,
+        "es_una_entrada": False
+    }
+}
 
 
-def ejecutar_puerta_or():
+def ejecutar_puerta_por_opcion(opcion):
     """
-    Ejecuta la simulación de la puerta OR usando la función genérica.
-    """
-    ejecutar_puerta_generica(
-        nombre_puerta="OR",
-        descripcion="La puerta OR devuelve 1 si AL MENOS UNA entrada es 1",
-        funcion_puerta=puerta_or,
-        es_una_entrada=False
-    )
+    Ejecuta una puerta lógica basada en la opción del menú.
 
+    Parámetros:
+    - opcion (int): Número de opción del menú
 
-def ejecutar_puerta_not():
+    Explicación para video:
+    Esta función usa un diccionario para eliminar toda la duplicación de código.
+    En lugar de tener 6 funciones casi idénticas, tenemos una sola función
+    que busca la configuración en el diccionario. Esto es mucho más eficiente
+    y fácil de mantener.
     """
-    Ejecuta la simulación de la puerta NOT usando la función genérica.
- """
-    ejecutar_puerta_generica(
-        nombre_puerta="NOT",
-        descripcion="La puerta NOT invierte la entrada: 0->1, 1->0",
-        funcion_puerta=puerta_not,
-        es_una_entrada=True
-    )
+    if opcion in PUERTAS_LOGICAS:
+        config = PUERTAS_LOGICAS[opcion]
+        ejecutar_puerta_generica(
+            nombre_puerta=config["nombre"],
+            descripcion=config["descripcion"],
+            funcion_puerta=config["funcion"],
+            es_una_entrada=config["es_una_entrada"]
+        )
+    else:
+        print("❌ Error: Opción de puerta no válida")
 
 
 def mostrar_todas_las_tablas():
     """
     Muestra todas las tablas de verdad de las puertas disponibles.
+
+    Explicación para video:
+    Ahora esta función usa el diccionario PUERTAS_LOGICAS para mostrar
+    automáticamente todas las tablas. Si agregamos una nueva puerta al
+    diccionario, aparecerá automáticamente aquí también.
     """
     print("\n📚 TODAS LAS TABLAS DE VERDAD")
     print("="*50)
 
-    # Mostrar tabla de verdad de cada puerta
-    mostrar_tabla_verdad_dos_entradas("AND", puerta_and)
-    mostrar_tabla_verdad_dos_entradas("OR", puerta_or)
-    mostrar_tabla_verdad_una_entrada("NOT", puerta_not)
+    # Mostrar tabla de verdad de cada puerta usando el diccionario
+    for opcion, config in sorted(PUERTAS_LOGICAS.items()):
+        if config["es_una_entrada"]:
+            mostrar_tabla_verdad_una_entrada(
+                config["nombre"], config["funcion"])
+        else:
+            mostrar_tabla_verdad_dos_entradas(
+                config["nombre"], config["funcion"])
+
+    print("\n💡 RESUMEN:")
+    print("- AND:  Solo 1 cuando ambas entradas son 1")
+    print("- OR:   Es 1 cuando al menos una entrada es 1")
+    print("- NOT:  Invierte siempre el valor de entrada")
+    print("- NAND: Inverso de AND (NOT AND)")
+    print("- NOR:  Inverso de OR (NOT OR)")
+    print("- XOR:  Es 1 cuando las entradas son diferentes")
 
 
 def validar_opcion_menu():
@@ -300,15 +366,20 @@ def validar_opcion_menu():
     Valida que el usuario seleccione una opción válida del menú.
 
     Retorna:
-    - int: Opción válida seleccionada (1-5)
+    - int: Opción válida seleccionada (1-8)
+
+    Explicación para video:
+    Ahora validamos opciones 1-8 para incluir todas las puertas lógicas.
+    La lógica de validación es más flexible y escalable.
     """
+    opciones_validas = [1, 2, 3, 4, 5, 6, 7, 8]
     while True:
         try:
-            opcion = int(input("\n👉 Seleccione una opción (1-5): "))
-            if 1 <= opcion <= 5:
+            opcion = int(input("\n👉 Seleccione una opción (1-8): "))
+            if opcion in opciones_validas:
                 return opcion
             else:
-                print("❌ Error: Seleccione una opción entre 1 y 5")
+                print("❌ Error: Seleccione una opción válida (1-8)")
         except ValueError:
             print("❌ Error: Ingrese solo números")
 
@@ -333,103 +404,25 @@ def main():
         # Obtener opción del usuario
         opcion = validar_opcion_menu()
 
-        # Ejecutar la opción seleccionada usando estructura condicional
-        if opcion == 1:
-            ejecutar_puerta_and()
-        elif opcion == 2:
-            ejecutar_puerta_or()
-        elif opcion == 3:
-            ejecutar_puerta_not()
-        elif opcion == 4:
+        # Ejecutar la opción seleccionada de forma más eficiente
+        if opcion == 4:
             mostrar_todas_las_tablas()
-        elif opcion == 5:
+        elif opcion == 8:
             # Salir del programa
             print("\n👋 ¡Gracias por usar el simulador!")
             print("🎓 Espero que hayas aprendido sobre puertas lógicas.")
             break
+        else:
+            # Para todas las puertas lógicas (1,2,3,5,6,7)
+            ejecutar_puerta_por_opcion(opcion)
 
         # Pausa para que el usuario pueda leer los resultados
         input("\n⏸️  Presione Enter para continuar...")
 
 # ============================================================================
-# EXTENSIBILIDAD FUTURA - COMENTARIOS PARA AGREGAR MÁS PUERTAS
-# ============================================================================
-
-
-"""
-CÓMO AGREGAR NUEVAS PUERTAS LÓGICAS (NAND, NOR, XOR):
-
-Con la nueva estructura genérica, agregar puertas es AÚN MÁS FÁCIL:
-
-1. Agregar la función de la nueva puerta en la sección de funciones:
-   
-   def puerta_nand(a, b):
-       # NAND es NOT AND: invierte el resultado de AND
-       return puerta_not(puerta_and(a, b))
-   
-   def puerta_nor(a, b):
-       # NOR es NOT OR: invierte el resultado de OR
-       return puerta_not(puerta_or(a, b))
-   
-   def puerta_xor(a, b):
-       # XOR devuelve 1 solo si las entradas son diferentes
-       if a != b:
-           return 1
-       else:
-           return 0
-
-2. Agregar opciones en el menú (modificar mostrar_menu()):
-   print("6. Puerta NAND - NOT AND")
-   print("7. Puerta NOR  - NOT OR")
-   print("8. Puerta XOR  - OR exclusivo")
-
-3. Agregar funciones ejecutoras SÚPER SIMPLES usando la función genérica:
-   
-   def ejecutar_puerta_nand():
-       ejecutar_puerta_generica(
-           nombre_puerta="NAND",
-           descripcion="La puerta NAND es NOT AND: invierte el resultado de AND",
-           funcion_puerta=puerta_nand,
-           es_una_entrada=False
-       )
-   
-   def ejecutar_puerta_nor():
-       ejecutar_puerta_generica(
-           nombre_puerta="NOR", 
-           descripcion="La puerta NOR es NOT OR: invierte el resultado de OR",
-           funcion_puerta=puerta_nor,
-           es_una_entrada=False
-       )
-   
-   def ejecutar_puerta_xor():
-       ejecutar_puerta_generica(
-           nombre_puerta="XOR",
-           descripcion="La puerta XOR devuelve 1 solo si las entradas son diferentes",
-           funcion_puerta=puerta_xor,
-           es_una_entrada=False
-       )
-
-4. Modificar main() para incluir las nuevas opciones:
-   elif opcion == 6:
-       ejecutar_puerta_nand()
-   elif opcion == 7:
-       ejecutar_puerta_nor()
-   elif opcion == 8:
-       ejecutar_puerta_xor()
-
-5. Actualizar mostrar_todas_las_tablas() para incluir las nuevas puertas.
-
-VENTAJAS DE LA NUEVA ESTRUCTURA GENÉRICA:
-- Menos código duplicado (DRY - Don't Repeat Yourself)
-- Más fácil de mantener y menos propenso a errores
-- Agregar nuevas puertas requiere solo 3-4 líneas de código
-- Consistencia automática en la interfaz de usuario
-- Facilita testing y debugging
-"""
-
-# ============================================================================
 # EJECUCIÓN DEL PROGRAMA
 # ============================================================================
+
 
 if __name__ == "__main__":
     main()
