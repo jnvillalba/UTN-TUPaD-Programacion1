@@ -1,18 +1,3 @@
-"""
-SIMULADOR DE PUERTAS LÓGICAS BÁSICAS
-=====================================
-
-Este programa simula el funcionamiento de puertas lógicas digitales básicas:
-- AND: Devuelve 1 solo si ambas entradas son 1
-- OR: Devuelve 1 si al menos una entrada es 1
-- NOT: Invierte el valor de entrada (0->1, 1->0)
-
-El diseño es escalable para agregar posteriormente:
-- NAND: NOT AND (inverso de AND)
-- NOR: NOT OR (inverso de OR)
-- XOR: OR exclusivo (1 si las entradas son diferentes)
-"""
-
 # ============================================================================
 # FUNCIONES PARA VALIDACIÓN DE ENTRADA
 # ============================================================================
@@ -20,22 +5,16 @@ El diseño es escalable para agregar posteriormente:
 
 def validar_entrada_binaria(mensaje):
     """
-    Valida que el usuario ingrese solo valores binarios (0 o 1).
+    Valida que el usuario ingrese solo valores binarios (0 o 1) SIN lanzar errores si escribe letras u otros símbolos.
 
-    Parámetros:
-    - mensaje (str): El mensaje a mostrar al usuario
-
-    Retorna:
-    - int: El valor binario validado (0 o 1)
+    Se evita el uso directo de int() antes de validar, para impedir que el programa se rompa con entradas como 'd', '-', '', etc.
     """
     while True:
-        try:
-            valor = int(input(mensaje))
-            if valor in [0, 1]:
-                return valor
-            print("❌ Error: Solo se permiten valores 0 o 1")
-        except ValueError:
-            print("❌ Error: Ingrese solo números (0 o 1)")
+        texto = input(mensaje).strip()
+        # Debe ser exactamente un carácter y estar entre '0' y '1'
+        if len(texto) == 1 and texto in ('0', '1'):
+            return int(texto)
+        print("❌ Error: Solo se permiten valores 0 o 1")
 
 
 def obtener_dos_entradas():
@@ -258,6 +237,8 @@ def ejecutar_puerta_generica(nombre_puerta, descripcion, funcion_puerta, es_una_
             mostrar_tabla_verdad_una_entrada(nombre_puerta, funcion_puerta)
         else:
             mostrar_tabla_verdad_dos_entradas(nombre_puerta, funcion_puerta)
+    else:
+        print("🔕 Tabla de verdad omitida.")
 
 
 # ============================================================================
@@ -267,37 +248,37 @@ def ejecutar_puerta_generica(nombre_puerta, descripcion, funcion_puerta, es_una_
 # Diccionario con la configuración de todas las puertas lógicas
 # Esto centraliza toda la información y facilita la adición de nuevas puertas
 PUERTAS_LOGICAS = {
-    1: {
+    1: {  # Opción 1 menú
         "nombre": "AND",
         "descripcion": "La puerta AND devuelve 1 solo si AMBAS entradas son 1",
         "funcion": puerta_and,
         "es_una_entrada": False
     },
-    2: {
+    2: {  # Opción 2 menú
         "nombre": "OR",
         "descripcion": "La puerta OR devuelve 1 si AL MENOS UNA entrada es 1",
         "funcion": puerta_or,
         "es_una_entrada": False
     },
-    3: {
+    3: {  # Opción 3 menú
         "nombre": "NOT",
         "descripcion": "La puerta NOT invierte la entrada: 0->1, 1->0",
         "funcion": puerta_not,
         "es_una_entrada": True
     },
-    6: {
+    5: {  # Opción 5 menú
         "nombre": "NAND",
         "descripcion": "La puerta NAND es NOT AND: invierte el resultado de AND",
         "funcion": puerta_nand,
         "es_una_entrada": False
     },
-    7: {
+    6: {  # Opción 6 menú
         "nombre": "NOR",
         "descripcion": "La puerta NOR es NOT OR: invierte el resultado de OR",
         "funcion": puerta_nor,
         "es_una_entrada": False
     },
-    8: {
+    7: {  # Opción 7 menú
         "nombre": "XOR",
         "descripcion": "La puerta XOR devuelve 1 solo si las entradas son diferentes",
         "funcion": puerta_xor,
@@ -312,12 +293,6 @@ def ejecutar_puerta_por_opcion(opcion):
 
     Parámetros:
     - opcion (int): Número de opción del menú
-
-    Explicación para video:
-    Esta función usa un diccionario para eliminar toda la duplicación de código.
-    En lugar de tener 6 funciones casi idénticas, tenemos una sola función
-    que busca la configuración en el diccionario. Esto es mucho más eficiente
-    y fácil de mantener.
     """
     if opcion in PUERTAS_LOGICAS:
         config = PUERTAS_LOGICAS[opcion]
@@ -334,11 +309,6 @@ def ejecutar_puerta_por_opcion(opcion):
 def mostrar_todas_las_tablas():
     """
     Muestra todas las tablas de verdad de las puertas disponibles.
-
-    Explicación para video:
-    Ahora esta función usa el diccionario PUERTAS_LOGICAS para mostrar
-    automáticamente todas las tablas. Si agregamos una nueva puerta al
-    diccionario, aparecerá automáticamente aquí también.
     """
     print("\n📚 TODAS LAS TABLAS DE VERDAD")
     print("="*50)
@@ -363,31 +333,18 @@ def mostrar_todas_las_tablas():
 
 def validar_opcion_menu():
     """
-    Valida que el usuario seleccione una opción válida del menú.
-
-    Retorna:
-    - int: Opción válida seleccionada (1-8)
-
-    Explicación para video:
-    Ahora validamos opciones 1-8 para incluir todas las puertas lógicas.
-    La lógica de validación es más flexible y escalable.
+    Valida que el usuario seleccione una opción válida del menú (1-8) sin que el programa se detenga por entradas no numéricas.
     """
-    opciones_validas = [1, 2, 3, 4, 5, 6, 7, 8]
+    opciones_validas = ("1", "2", "3", "4", "5", "6", "7", "8")
     while True:
-        try:
-            opcion = int(input("\n👉 Seleccione una opción (1-8): "))
-            if opcion in opciones_validas:
-                return opcion
-            else:
-                print("❌ Error: Seleccione una opción válida (1-8)")
-        except ValueError:
-            print("❌ Error: Ingrese solo números")
+        texto = input("\n👉 Seleccione una opción (1-8): ").strip()
+        if texto in opciones_validas:
+            return int(texto)
+        print("❌ Error: Seleccione una opción válida (1-8)")
 
 # ============================================================================
 # FUNCIÓN PRINCIPAL DEL PROGRAMA
 # ============================================================================
-
-# TODO: mathcase
 
 
 def main():
