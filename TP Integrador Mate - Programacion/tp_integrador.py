@@ -5,9 +5,7 @@
 
 def validar_entrada_binaria(mensaje):
     """
-    Valida que el usuario ingrese solo valores binarios (0 o 1) SIN lanzar errores si escribe letras u otros símbolos.
-
-    Se evita el uso directo de int() antes de validar, para impedir que el programa se rompa con entradas como 'd', '-', '', etc.
+    Valida que el usuario ingrese solo valores binarios (0 o 1) mostrando un mensaje de error si escribe letras u otros símbolos.
     """
     while True:
         texto = input(mensaje).strip()
