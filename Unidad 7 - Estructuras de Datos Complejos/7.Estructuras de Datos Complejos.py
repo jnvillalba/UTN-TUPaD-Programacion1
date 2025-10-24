@@ -145,7 +145,6 @@ def gestionar_stock_productos():
         opcion = input("\nSeleccione una opción: ").strip()
 
         if opcion == "1":
-            # Consultar stock
             producto = input(
                 "Ingrese el nombre del producto: ").strip().lower()
             if producto in stock:
@@ -154,7 +153,6 @@ def gestionar_stock_productos():
                 print("El producto no existe en el inventario.")
 
         elif opcion == "2":
-            # Agregar unidades a producto existente
             producto = input(
                 "Ingrese el nombre del producto: ").strip().lower()
             if producto in stock:
@@ -165,7 +163,6 @@ def gestionar_stock_productos():
                 print("El producto no existe. Use la opción 3 para agregarlo.")
 
         elif opcion == "3":
-            # Agregar nuevo producto
             producto = input(
                 "Ingrese el nombre del nuevo producto: ").strip().lower()
             if producto in stock:
@@ -177,7 +174,6 @@ def gestionar_stock_productos():
                     f"Producto '{producto}' agregado con {cantidad} unidades.")
 
         elif opcion == "4":
-            # Mostrar todos los productos
             print("\n--- Stock Actual ---")
             for producto, cantidad in stock.items():
                 print(f"{producto.capitalize()}: {cantidad} unidades")
