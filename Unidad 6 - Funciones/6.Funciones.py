@@ -103,7 +103,6 @@ def calcular_promedio(a, b, c):
 
 
 def main():
-    # Llamada a la función 1: imprimir_hola_mundo
     imprimir_hola_mundo()
 
 
