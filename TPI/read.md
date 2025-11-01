@@ -123,5 +123,5 @@ El programa incluye validación de datos:
 - Búsqueda insensible a mayúsculas/minúsculas
 - Mensajes de error claros cuando se ingresa un valor inválido
 
-## Integrantes
-- Joaquin Villalba
+## Participación de los integrantes
+- Joaquín Villalba — Desarrollo de código principal, pruebas, documentación.
