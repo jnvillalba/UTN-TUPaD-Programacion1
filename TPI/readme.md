@@ -4,7 +4,7 @@
 Este programa permite gestionar información sobre países con las siguientes funcionalidades:
 - **Agregar país**: Permite añadir nuevos países con datos de población, superficie y continente
 - **Actualizar país**: Modifica los datos de un país existente
-- **Buscar país**: Busca países por nombre ((coincidencia parcial o exacta)
+- **Buscar país**: Busca países por nombre (coincidencia parcial o exacta)
 - **Filtrar por continente**: Muestra todos los países de un continente específico
 - **Filtrar por rango de población**: Filtra países dentro de un rango poblacional
 - **Filtrar por rango de superficie**: Filtra países dentro de un rango de superficie
